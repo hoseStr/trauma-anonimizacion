@@ -1,0 +1,272 @@
+# ---------------------------------------------------------------------------
+# Gazetteers para la Capa B de anonimización.
+#
+# VERSIÓN DE EJEMPLO PARA EL REPOSITORIO PÚBLICO. La lista curada a mano que se
+# usó sobre los datos reales contiene nombres de instituciones y de
+# profesionales de salud, y no se publica. Aquí las secciones `instituciones*`
+# y `medicos` llevan entradas FICTICIAS con la misma forma que las reales, para
+# que el pipeline y los tests corran. `scripts/build_gazetteers.py` genera el
+# borrador a partir de tus propios datos.
+#
+# Todas las claves están normalizadas: minúsculas, sin tildes.
+#
+# Regla de oro: una entrada solo se anonimiza si va precedida de su *trigger*
+# (hospital/clínica/fundación para instituciones, dr/dra/doctor para médicos).
+# Por eso "clínica satisfactoria" o "antebrazo dr." no se tocan.
+# ---------------------------------------------------------------------------
+
+# Nombres propios de IPS. Se anonimizan como [INSTITUCION].
+# Ordenados por longitud descendente en tiempo de ejecución para que
+# "ernesto gil trujillo" gane sobre "ernesto gil".
+instituciones:
+  - aurora
+  - ernesto gil trujillo
+  - ernesto gil
+  - hernando villota
+  - integrado de jamundi
+  - los almendros
+  - nuestra senora de los remedios
+  - rayito de sol
+  - san jose
+  - san juan de dios
+  - san rafael
+  - san vicente
+  - santa ana
+
+# Siglas de instituciones. Se anonimizan SIN trigger, pero solo con
+# límite de palabra y respetando mayúsculas/minúsculas exactas.
+instituciones_siglas:
+  - HUC
+
+# Nombres completos e inequívocos que aparecen SIN el trigger
+# ("es llevado al Rayito de Sol", "remitido de Los Almendros"). Solo entran
+# aquí nombres que no pueden confundirse con vocabulario clínico.
+instituciones_sin_trigger:
+  - rayito de sol
+  - los almendros
+  - ernesto gil trujillo
+  - hernando villota
+  - san juan de dios
+
+# Palabras que siguen a hospital/clínica/fundación pero NO son nombres propios.
+# Sin esta lista, "evolución clínica satisfactoria" u "hospital de periferia"
+# se anonimizarían y se perdería información clínica real.
+tipos_genericos:
+  - aceptable
+  - actual
+  - anotada
+  - debe
+  - estacionaria
+  - evaluado
+  - evolucion
+  - falleciendo
+  - neurologica
+  - oftalmologica
+  - pendiente
+  - puede
+  - quien
+  - refiriendo
+  - sastifactoria      # typo real del corpus
+  - satifactoria       # typo real del corpus
+  - significativa
+  - tras
+  - uroanalisis
+  - adecuada
+  - adecuado
+  - buena
+  - bueno
+  - cercano
+  - compatible
+  - critica
+  - critico
+  - de periferia
+  - descrita
+  - especializada
+  - estable
+  - estricta
+  - estricto
+  - favorable
+  - general
+  - hemodinamicamente
+  - infantil
+  - leve
+  - local
+  - mala
+  - manifestada
+  - moderada
+  - ni radiologica
+  - nivel
+  - observada
+  - oftalmologica
+  - periferia
+  - psiquiatrico
+  - referida
+  - regular
+  - remisor
+  - severa
+  - similar
+  - sugestiva
+  - sugestivo
+  - satisfactoria
+  - satisfactorio
+  - universitario
+
+# Asimetría del corpus: "hospital" casi siempre precede al nombre de una IPS,
+# mientras que "clínica" es adjetivo la mitad de las veces ("evolución clínica
+# satisfactoria"). Por eso:
+#   - clínica / fundación -> solo se anonimiza con nombre del gazetteer (whitelist)
+#   - hospital / ESE / IPS -> se anonimiza el token siguiente SALVO que esté aquí
+# Esta lista es la única puerta abierta, así que conviene mantenerla al día con
+# lo que reporte reports/residuo_phi.csv.
+hospital_genericos:
+  - basico
+  - cercano
+  - de menor complejidad
+  - de mayor complejidad
+  - general
+  - infantil
+  - local
+  - mas cercano
+  - municipal
+  - nivel
+  - periferia
+  - periferico
+  - psiquiatrico
+  - regional
+  - remisor
+  - remitente
+  - universitario
+  # detectados en reports/hospital_tokens_anonimizados.csv como
+  # sobre-anonimización: no son nombres de IPS
+  - cual
+  - cuadro
+  - dia
+  - dicho
+  - este
+  - esta
+  - lado
+  - mas
+  - mayor
+  - menor
+  - mismo
+  - momento
+  - motivo
+  - otro
+  - otra
+  - paciente
+  - presento
+  - primaria
+  - primer
+  - primera
+  - remision
+  - salud
+  - servicio
+  - tal
+  # formas verbales / conectores que aparecen tras "hospital" sin ser nombre
+  - a
+  - al
+  - con
+  - donde
+  - el
+  - en
+  - es
+  - fue
+  - la
+  - los
+  - las
+  - para
+  - por
+  - presenta
+  - que
+  - quien
+  - se
+  - sin
+  - un
+  - una
+  - y
+
+# Apellidos y nombres de profesionales detectados tras un trigger dr/dra/doctor.
+# Se usan como WHITELIST de alta precisión: si aparece "Dr. <algo>" que no está
+# aquí, no se reemplaza pero SÍ se registra en el reporte de revisión.
+# Esto evita destrozar "antebrazo dr." (dr = derecho) o "sin dr pero con...".
+medicos:
+  - moncada
+  - palacios
+  - villalobos
+  - urrutia
+  - zambrano
+
+# Municipios. Se anonimizan como [MUNICIPIO] SIN trigger, pero se aplican
+# DESPUÉS de las instituciones para que "Ernesto Gil Trujillo" no pierda
+# su cola con el municipio de Trujillo, y con una lista de excepciones.
+municipios:
+  - alcala
+  - andalucia
+  - ansermanuevo
+  - argelia
+  - bogota
+  - bolivar
+  - buenaventura
+  - buenos aires
+  - buga
+  - bugalagrande
+  - caicedonia
+  - caloto
+  - candelaria
+  - cartago
+  - corinto
+  - dagua
+  - darien
+  - el aguila
+  - el cairo
+  - el cerrito
+  - el dovio
+  - florida
+  - ginebra
+  - guacari
+  - guadalajara de buga
+  - guapi
+  - ipiales
+  - istmina
+  - jamundi
+  - la cumbre
+  - la union
+  - la victoria
+  - medellin
+  - miranda
+  - obando
+  - padilla
+  - palmira
+  - pasto
+  - popayan
+  - pradera
+  - puerto tejada
+  - quibdo
+  - restrepo
+  - riofrio
+  - roldanillo
+  - san pedro
+  - santander de quilichao
+  - santiago de cali
+  - sevilla
+  - suarez
+  - tado
+  - timbio
+  - toro
+  - trujillo
+  - tulua
+  - tumaco
+  - ulloa
+  - vijes
+  - villa rica
+  - yotoco
+  - yumbo
+  - zarzal
+  - cali
+
+# Contextos en los que un "municipio" NO es un lugar y debe conservarse.
+# Se evalúan como regex sobre la ventana alrededor del match.
+municipios_excepciones:
+  - "ernesto gil\\s+trujillo"         # institución, no el municipio de Trujillo
+  - "signo de\\s+bolivar"
+  - "hospital\\s+de\\s+versalles"

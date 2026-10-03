@@ -1,0 +1,18 @@
+# Este repo es solo código. Ningún dato clínico, corpus o reporte con texto
+# debe versionarse: todo lo que produce el pipeline queda fuera.
+data/*
+!data/README.md
+outputs/
+reports/
+*.csv
+*.tsv
+*.parquet
+*.jsonl
+*.xlsx
+*.html
+
+# Entorno y cachés
+.venv/
+venv/
+__pycache__/
+.pytest_cache/

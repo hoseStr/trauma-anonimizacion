@@ -1,0 +1,106 @@
+# ---------------------------------------------------------------------------
+# Diccionario de abreviaturas de urgencias / trauma en español (Colombia).
+#
+# ESTRATEGIA: expansión AUMENTATIVA, no sustitutiva.
+#   "HPAF en abdomen"  ->  "HPAF (herida por arma de fuego) en abdomen"
+# Así el chunk indexado matchea tanto la consulta abreviada como la expandida,
+# y no se pierde el término tal como lo escribió el clínico.
+#
+# Las claves se comparan sin tildes, sin distinguir mayúsculas, con límite de
+# palabra. Solo se expande la PRIMERA aparición dentro de cada documento para
+# no inflar el texto ni degradar el embedding con repetición.
+#
+# Frecuencias medidas sobre trauma.csv (27.157 registros).
+# ---------------------------------------------------------------------------
+
+abreviaturas:
+  # --- mecanismo de lesión ---
+  hpaf:   herida por arma de fuego          # 2644
+  haf:    herida por arma de fuego          # 372
+  hpacp:  herida por arma cortopunzante     # 600
+  hacp:   herida por arma cortopunzante     # 225
+  hpcp:   herida por arma cortopunzante
+  hpco:   herida por arma contundente
+  tce:    trauma craneoencefalico           # 559
+  tec:    trauma encefalocraneano           # 19
+  scq:    superficie corporal quemada
+
+  # --- paciente / persona ---
+  pte:    paciente                          # 2201
+  pcte:   paciente                          # 1564
+
+  # --- estudios e imágenes ---
+  rx:     radiografia                       # 1525
+  tac:    tomografia axial computarizada    # 1116
+  tc:     tomografia computarizada          # 22
+  eco:    ecografia                         # 88
+  fast:   ecografia FAST abdominal          # 71
+  ecg:    electrocardiograma                # 47
+  ekg:    electrocardiograma                # 47
+  rnm:    resonancia nuclear magnetica
+  rmn:    resonancia magnetica nuclear
+
+  # --- hallazgos y diagnóstico ---
+  fx:     fractura                          # 1465
+  hx:     herida                            # 1030
+  dx:     diagnostico                       # 120
+  sx:     sintomas                          # 89
+  tx:     tratamiento                       # 293
+  qx:     quirurgico                        # 228
+  ap:     antecedentes personales           # 132
+  hsa:    hemorragia subaracnoidea          # 22
+  hed:    hematoma epidural
+  hsd:    hematoma subdural
+  hic:    hemorragia intracraneana
+  tvp:    trombosis venosa profunda
+  tep:    tromboembolismo pulmonar
+
+  # --- topografía ---
+  msd:    miembro superior derecho          # 498
+  msi:    miembro superior izquierdo        # 510
+  mid:    miembro inferior derecho          # 348
+  mii:    miembro inferior izquierdo        # 371
+  mmss:   miembros superiores
+  mmii:   miembros inferiores
+  eic:    espacio intercostal               # 369
+  abd:    abdomen                           # 55
+  od:     ojo derecho                       # 83
+  oi:     ojo izquierdo                     # 94
+  ao:     ambos ojos                        # 34
+  ce:     cuerpo extrano                    # 16
+
+  # --- signos vitales y escalas ---
+  gcs:    escala de coma de Glasgow         # 38
+  ta:     tension arterial                  # 499
+  fc:     frecuencia cardiaca               # 314
+  fr:     frecuencia respiratoria           # 308
+  sv:     signos vitales                    # 38
+  sato2:  saturacion de oxigeno
+  spo2:   saturacion de oxigeno
+
+  # --- vías, manejo y servicios ---
+  iv:     intravenoso                       # 190
+  vo:     via oral                          # 46
+  im:     intramuscular                     # 26
+  sc:     subcutaneo                        # 63
+  vvp:    via venosa periferica
+  iot:    intubacion orotraqueal            # 176
+  uci:    unidad de cuidados intensivos     # 136
+  ucin:   unidad de cuidado intensivo neonatal
+  orl:    otorrinolaringologia              # 212
+
+  # --- antecedentes ---
+  hta:    hipertension arterial             # 51
+  ha:     hipertension arterial             # 244
+  dm:     diabetes mellitus                 # 20
+  epoc:   enfermedad pulmonar obstructiva cronica  # 17
+  acv:    accidente cerebrovascular         # 25
+
+# Abreviaturas que NO se expanden por ser demasiado ambiguas en este corpus.
+# Documentadas explícitamente para que la decisión quede trazable.
+excluidas:
+  dr:  "ambiguo: 'doctor' vs 'derecho' (antebrazo dr.)"
+  izq: "no es abreviatura clínica opaca; se entiende sin expandir"
+  der: "idem"
+  cm:  "unidad de medida, no requiere expansion"
+  vih: "dato sensible; se conserva literal, no se expande ni se aumenta"

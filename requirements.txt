@@ -1,0 +1,11 @@
+# --- Pipeline de limpieza y anonimización ---
+pandas>=2.0
+pyarrow>=14.0
+PyYAML>=6.0
+
+# --- Capa C de anonimización (opcional) ---
+# tras instalar:  python -m spacy download es_core_news_lg
+spacy>=3.7
+
+# --- Tests ---
+pytest>=7.0
