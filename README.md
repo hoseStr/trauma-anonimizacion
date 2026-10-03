@@ -5,7 +5,7 @@ Pipeline en Python que toma un registro hospitalario de atención de trauma
 **anonimizado, limpio y con metadatos**, listo para indexarse en un sistema de
 recuperación aumentada (RAG). Es la primera mitad de un proyecto de dos partes;
 la segunda es el prototipo RAG que consume este corpus:
-**[trauma-rag](https://github.com/jestronga/trauma-rag)**.
+**[trauma-rag](https://github.com/hoseStr/trauma-rag)**.
 
 > **Sin datos.** Este repositorio contiene solo código, configuración y
 > documentación. El registro clínico original, el corpus generado y los
